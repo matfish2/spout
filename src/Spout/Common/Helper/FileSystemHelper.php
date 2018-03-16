@@ -103,12 +103,8 @@ class FileSystemHelper
         );
 
         foreach ($itemIterator as $item) {
-            if ($item->isDir()) {
-                $cmd = (PHP_OS === 'Windows') ? 'rd /s /q %s' : 'rm -rf %s';
-                exec(sprintf($cmd, escapeshellarg($item->getPathname())));
-            } else {
-                unlink($item->getPathname());
-            }
+            $todo = ($item->isDir() ? 'rmdir' : 'unlink');
+            $todo($item->getRealPath());
         }
 
         rmdir($folderPath);
