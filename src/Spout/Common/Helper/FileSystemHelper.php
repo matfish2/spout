@@ -104,7 +104,8 @@ class FileSystemHelper
 
         foreach ($itemIterator as $item) {
             if ($item->isDir()) {
-                rmdir($item->getPathname());
+                $cmd = (PHP_OS === 'Windows') ? 'rd /s /q %s' : 'rm -rf %s';
+                exec(sprintf($cmd, escapeshellarg($item->getPathname())));
             } else {
                 unlink($item->getPathname());
             }
